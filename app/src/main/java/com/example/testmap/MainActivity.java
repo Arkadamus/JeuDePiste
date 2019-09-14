@@ -7,12 +7,15 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.TokenWatcher;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +47,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);
         android.app.FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
+
+        Button btnOption = (Button) findViewById(R.id.btnOptions);
+
+        btnOption.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onClickOption(v);
+            }
+        });
 
     }
 
@@ -150,14 +164,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     ///Boutons
-    public void onClick_Options()
+    public void onClickOption(View v)
     {
-        TextView textView = findViewById(R.id.txDescription);
-    }
-
-    public void onClick_RealiserTache()
-    {
-
+        Intent intent = new Intent(this,Options.class);
+        startActivity(intent);
     }
 
     ///Methodes autres
@@ -168,5 +178,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         return null;
     }
+
 }
 

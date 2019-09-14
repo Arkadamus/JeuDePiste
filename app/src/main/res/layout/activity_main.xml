@@ -40,7 +40,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:onClick="onClick_Options"
             android:text="Options" />
 
         <Button
@@ -48,8 +47,8 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
-            android:onClick="onClick_RealiserTache"
             android:text="Réaliser tâche" />
+
     </LinearLayout>
 
 
