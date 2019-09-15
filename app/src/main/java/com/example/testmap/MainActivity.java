@@ -25,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     //Pour la permission
     private static final int PERMS_CALL_ID = 1234;
 
-    private LocationManager lm;
+    private LocationManager locationManager;
     private MapFragment mapFragment;
     private GoogleMap googleMap;
 
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
 
         Button btnOption = (Button) findViewById(R.id.btnOptions);
+        Button btnRealiserTache = (Button) findViewById(R.id.btnRealiserTache);
 
         btnOption.setOnClickListener(new View.OnClickListener()
         {
@@ -56,6 +58,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             public void onClick(View v)
             {
                 onClickOption(v);
+            }
+        });
+
+        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateLieu(null,null);
             }
         });
 
@@ -82,17 +91,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             return;
         }
 
-        lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,0,this);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,0,this);
         }
 
-        if(lm.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
-            lm.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 10000,0,this);
+        if(locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
+            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 10000,0,this);
         }
 
-        if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-            lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000,0,this);
+        if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000,0,this);
         }
 
         loadMap();
@@ -111,9 +120,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onPause() {
         super.onPause();
 
-        if( lm != null)
+        if( locationManager != null)
         {
-            lm.removeUpdates(this);
+            locationManager.removeUpdates(this);
         }
     }
 
@@ -127,40 +136,21 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 //capture l'objet de carto
                 MainActivity.this.googleMap = googleMap;
 
-                googleMap.moveCamera(CameraUpdateFactory.zoomBy(15));
                 googleMap.setMyLocationEnabled(true);
-                googleMap.addMarker(new MarkerOptions().position( new LatLng(45, 2)).title("test"));
+
+                getCurrentLocation();
+                //set la camera sur la position de l'utilisateur
+        if(locationManager != null) {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            CameraPosition cameraPosition = new CameraPosition(latLng,15,0,0);//latlng/zoom/0/0
+            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+            TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
+            tvDescription.setText("x : " + location.getLatitude() + "y : "+location.getLongitude() );
+            tvDescription.setVisibility(View.VISIBLE);
+             }
             }
         });
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        double latitude = location.getLatitude();
-        double longitude = location.getLongitude();
-
-        //messagebox.show()
-        Toast.makeText(this,"Location : " + latitude + "/" + longitude, Toast.LENGTH_LONG).show();
-        if(googleMap != null)
-        {
-            LatLng googleLocation = new LatLng(latitude,longitude);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
-        }
     }
 
     ///Boutons
@@ -171,13 +161,78 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     ///Methodes autres
-    public CLieu CreateLieu(double distance)
+    @SuppressWarnings("MissingPermission")
+    public CLieu CreateLieu(String nom, CPreuve preuve)
     {
-        Random random = new Random();
-        int randInt = random.nextInt();
+        getCurrentLocation();
+        if(locationManager != null) {
+            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            double rayon = 0.013 ;//Rayon pour générer le lieu (1m=0.000013 (expérimental))
+
+            double x = Math.random();
+            x = x*rayon*2-rayon;//génére un nombre en [-rayon;+rayon] sur l'axe x
+
+            double y = Math.random();
+            y = y*(rayon+0.005)*2-(rayon+0.005);//génére un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
+
+            double angle = Math.random();
+            angle = angle * 2 -1;//génére un nombre [-1;1] pour créer un angle et avoir un cercle
+            Toast.makeText(this,"x : " + x+ "y " + y + " a "+ angle, Toast.LENGTH_LONG).show();
+            latitude += x*Math.cos(angle);
+            longitude += y*Math.sin(angle);
+
+            CLieu lieu = new CLieu(nom,latitude,longitude,preuve);
+            Toast.makeText(this,"Location : " + location.getLatitude() + "/" + location.getLongitude(), Toast.LENGTH_LONG).show();
+            googleMap.addMarker(new MarkerOptions().position( new LatLng(latitude, longitude)).title(nom));
+
+            return lieu;
+        }
         return null;
     }
+
+    //donne à la donnée locationManager la position
+    public void getCurrentLocation()
+    {
+        try {
+            locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
+        }catch (SecurityException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    ///Méthodes inutilisées mais insupprimables
+    @Override
+    public void onProviderDisabled(String s) {
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+//        double latitude = location.getLatitude();
+//        double longitude = location.getLongitude();
+//
+//        //messagebox.show()
+//        Toast.makeText(this,"Location : " + latitude + "/" + longitude, Toast.LENGTH_LONG).show();
+//        if(googleMap != null)
+//        {
+//            LatLng googleLocation = new LatLng(latitude,longitude);
+//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
+//        }
+    }
+
 
 }
 
