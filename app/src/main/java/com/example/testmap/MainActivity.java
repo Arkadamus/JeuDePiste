@@ -27,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Random;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private LocationManager locationManager;
     private MapFragment mapFragment;
     private GoogleMap googleMap;
+    private Marker marker;
 
     ///Chargement et méthodes pour map
 
@@ -61,13 +63,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         });
 
+        final double rayon = 0.013;
         btnRealiserTache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateLieu(null,null);
+                GenerateTache();
             }
         });
-
     }
 
     @Override
@@ -145,9 +147,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
             CameraPosition cameraPosition = new CameraPosition(latLng,15,0,0);//latlng/zoom/0/0
             googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-            TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
-            tvDescription.setText("x : " + location.getLatitude() + "y : "+location.getLongitude() );
-            tvDescription.setVisibility(View.VISIBLE);
+//            TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
+////            tvDescription.setText("x : " + location.getLatitude() + "y : "+location.getLongitude() );
+////            tvDescription.setVisibility(View.VISIBLE);
              }
             }
         });
@@ -161,8 +163,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     ///Methodes autres
+    public void GenerateTache()
+    {
+        double rayon = 0.013 ;//Rayon pour génèrer le lieu (1m=0.000013 (expérimental))
+
+        double latitude = CreateLieu(rayon)[0];
+        double longitude = CreateLieu(rayon )[1];
+
+        int enumPreuve = (int)(Math.round(Math.random()*7));
+    }
+
     @SuppressWarnings("MissingPermission")
-    public CLieu CreateLieu(String nom, CPreuve preuve)
+    public double[] CreateLieu(double rayon)
     {
         getCurrentLocation();
         if(locationManager != null) {
@@ -170,25 +182,30 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             double latitude = location.getLatitude();
             double longitude = location.getLongitude();
-            double rayon = 0.013 ;//Rayon pour générer le lieu (1m=0.000013 (expérimental))
+
 
             double x = Math.random();
-            x = x*rayon*2-rayon;//génére un nombre en [-rayon;+rayon] sur l'axe x
+            x = x*rayon*2-rayon;//génère un nombre en [-rayon;+rayon] sur l'axe x
 
             double y = Math.random();
-            y = y*(rayon+0.005)*2-(rayon+0.005);//génére un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
+            y = y*(rayon+0.005)*2-(rayon+0.005);//génère un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
 
             double angle = Math.random();
-            angle = angle * 2 -1;//génére un nombre [-1;1] pour créer un angle et avoir un cercle
-            Toast.makeText(this,"x : " + x+ "y " + y + " a "+ angle, Toast.LENGTH_LONG).show();
+            angle = angle * 2 -1;//génère un nombre [-1;1] pour créer un angle et avoir un cercle
             latitude += x*Math.cos(angle);
             longitude += y*Math.sin(angle);
 
-            CLieu lieu = new CLieu(nom,latitude,longitude,preuve);
-            Toast.makeText(this,"Location : " + location.getLatitude() + "/" + location.getLongitude(), Toast.LENGTH_LONG).show();
-            googleMap.addMarker(new MarkerOptions().position( new LatLng(latitude, longitude)).title(nom));
+            double res[] = {latitude,longitude};
 
-            return lieu;
+            //CLieu lieu = new CLieu(nom,latitude,longitude,preuve);
+            //Toast.makeText(this,"Location : " + location.getLatitude() + "/" + location.getLongitude(), Toast.LENGTH_LONG).show();
+
+            if(marker != null)
+                marker.remove();
+
+            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+
+            return res;
         }
         return null;
     }
