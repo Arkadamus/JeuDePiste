@@ -13,6 +13,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.CpuUsageInfo;
 import android.os.TokenWatcher;
 import android.view.View;
 import android.widget.Button;
@@ -54,11 +55,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Button btnOption = (Button) findViewById(R.id.btnOptions);
         Button btnRealiserTache = (Button) findViewById(R.id.btnRealiserTache);
 
-        btnOption.setOnClickListener(new View.OnClickListener()
-        {
+        btnOption.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 onClickOption(v);
             }
         });
@@ -82,9 +81,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     //pour demander les permissions si elle ne les a pas
-    private void CheckPermissions(){
-        if((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)){
+    private void CheckPermissions() {
+        if ((ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)) {
 
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
@@ -94,16 +93,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000,0,this);
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, this);
         }
 
-        if(locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
-            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 10000,0,this);
+        if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 10000, 0, this);
         }
 
-        if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000,0,this);
+        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, this);
         }
 
         loadMap();
@@ -111,9 +110,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     //force la permission si jms
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
-        if(requestCode == PERMS_CALL_ID){
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMS_CALL_ID) {
             CheckPermissions();
         }
     }
@@ -122,15 +121,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onPause() {
         super.onPause();
 
-        if( locationManager != null)
-        {
+        if (locationManager != null) {
             locationManager.removeUpdates(this);
         }
     }
 
     @SuppressWarnings("MissingPermission")
-    private void loadMap()
-    {
+    private void loadMap() {
         //creer une interface
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -142,42 +139,39 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                 getCurrentLocation();
                 //set la camera sur la position de l'utilisateur
-        if(locationManager != null) {
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraPosition cameraPosition = new CameraPosition(latLng,15,0,0);//latlng/zoom/0/0
-            googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+                if (locationManager != null) {
+                    Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    CameraPosition cameraPosition = new CameraPosition(latLng, 15, 0, 0);//latlng/zoom/0/0
+                    googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 //            TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
 ////            tvDescription.setText("x : " + location.getLatitude() + "y : "+location.getLongitude() );
 ////            tvDescription.setVisibility(View.VISIBLE);
-             }
+                }
             }
         });
     }
 
     ///Boutons
-    public void onClickOption(View v)
-    {
-        Intent intent = new Intent(this,Options.class);
+    public void onClickOption(View v) {
+        Intent intent = new Intent(this, Options.class);
         startActivity(intent);
     }
 
     ///Methodes autres
-    public void GenerateTache()
-    {
-        double rayon = 0.013 ;//Rayon pour génèrer le lieu (1m=0.000013 (expérimental))
+    public void GenerateTache() {
+        CPreuve preuve = CPreuve.GeneratePreuve();
+
+        double rayon = 0.013;//Rayon pour génèrer le lieu (1m=0.000013 (expérimental))
 
         double latitude = CreateLieu(rayon)[0];
-        double longitude = CreateLieu(rayon )[1];
-
-        int enumPreuve = (int)(Math.round(Math.random()*7));
+        double longitude = CreateLieu(rayon)[1];
     }
 
     @SuppressWarnings("MissingPermission")
-    public double[] CreateLieu(double rayon)
-    {
+    public double[] CreateLieu(double rayon) {
         getCurrentLocation();
-        if(locationManager != null) {
+        if (locationManager != null) {
             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
             double latitude = location.getLatitude();
@@ -185,25 +179,25 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
 
             double x = Math.random();
-            x = x*rayon*2-rayon;//génère un nombre en [-rayon;+rayon] sur l'axe x
+            x = x * rayon * 2 - rayon;//génère un nombre en [-rayon;+rayon] sur l'axe x
 
             double y = Math.random();
-            y = y*(rayon+0.005)*2-(rayon+0.005);//génère un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
+            y = y * (rayon + 0.005) * 2 - (rayon + 0.005);//génère un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
 
             double angle = Math.random();
-            angle = angle * 2 -1;//génère un nombre [-1;1] pour créer un angle et avoir un cercle
-            latitude += x*Math.cos(angle);
-            longitude += y*Math.sin(angle);
+            angle = angle * 2 - 1;//génère un nombre [-1;1] pour créer un angle et avoir un cercle
+            latitude += x * Math.cos(angle);
+            longitude += y * Math.sin(angle);
 
-            double res[] = {latitude,longitude};
+            double res[] = {latitude, longitude};
 
             //CLieu lieu = new CLieu(nom,latitude,longitude,preuve);
             //Toast.makeText(this,"Location : " + location.getLatitude() + "/" + location.getLongitude(), Toast.LENGTH_LONG).show();
 
-            if(marker != null)
+            if (marker != null)
                 marker.remove();
 
-            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude,longitude)));
+            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
 
             return res;
         }
@@ -211,13 +205,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     //donne à la donnée locationManager la position
-    public void getCurrentLocation()
-    {
+    public void getCurrentLocation() {
         try {
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 5, this);
-        }catch (SecurityException e)
-        {
+        } catch (SecurityException e) {
             e.printStackTrace();
         }
     }
