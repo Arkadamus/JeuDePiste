@@ -160,49 +160,57 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     ///Methodes autres
     public void GenerateTache() {
-        CPreuve preuve = CPreuve.GeneratePreuve();
+        CPreuve cPreuve = CPreuve.GeneratePreuve();
+        CLieu cLieu = new CLieu();
+        cLieu.GeneratePlace();
+        cLieu.Addpreuve(cPreuve);
 
-        double rayon = 0.013;//Rayon pour génèrer le lieu (1m=0.000013 (expérimental))
+        if (marker != null)
+            marker.remove();
 
-        double latitude = CreateLieu(rayon)[0];
-        double longitude = CreateLieu(rayon)[1];
+        marker = googleMap.addMarker(new MarkerOptions().title(cLieu.getM_nom()).position(new LatLng(cLieu.getM_latitude(), cLieu.getM_longitude())));
+
+        TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
+        tvDescription.setText(cLieu.getM_preuve().getM_description());
+
     }
 
-    @SuppressWarnings("MissingPermission")
-    public double[] CreateLieu(double rayon) {
-        getCurrentLocation();
-        if (locationManager != null) {
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            double latitude = location.getLatitude();
-            double longitude = location.getLongitude();
-
-
-            double x = Math.random();
-            x = x * rayon * 2 - rayon;//génère un nombre en [-rayon;+rayon] sur l'axe x
-
-            double y = Math.random();
-            y = y * (rayon + 0.005) * 2 - (rayon + 0.005);//génère un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
-
-            double angle = Math.random();
-            angle = angle * 2 - 1;//génère un nombre [-1;1] pour créer un angle et avoir un cercle
-            latitude += x * Math.cos(angle);
-            longitude += y * Math.sin(angle);
-
-            double res[] = {latitude, longitude};
-
-            //CLieu lieu = new CLieu(nom,latitude,longitude,preuve);
-            //Toast.makeText(this,"Location : " + location.getLatitude() + "/" + location.getLongitude(), Toast.LENGTH_LONG).show();
-
-            if (marker != null)
-                marker.remove();
-
-            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
-
-            return res;
-        }
-        return null;
-    }
+//    @SuppressWarnings("MissingPermission")
+//    public double[] CreateLieu(double rayon) {
+//        double rayon = 0.013;//Rayon pour génèrer le lieu (1m=0.000013 (expérimental))
+//        getCurrentLocation();
+//        if (locationManager != null) {
+//            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//
+//            double latitude = location.getLatitude();
+//            double longitude = location.getLongitude();
+//
+//
+//            double x = Math.random();
+//            x = x * rayon * 2 - rayon;//génère un nombre en [-rayon;+rayon] sur l'axe x
+//
+//            double y = Math.random();
+//            y = y * (rayon + 0.005) * 2 - (rayon + 0.005);//génère un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
+//
+//            double angle = Math.random();
+//            angle = angle * 2 - 1;//génère un nombre [-1;1] pour créer un angle et avoir un cercle
+//            latitude += x * Math.cos(angle);
+//            longitude += y * Math.sin(angle);
+//
+//            double res[] = {latitude, longitude};
+//
+//            //CLieu lieu = new CLieu(nom,latitude,longitude,preuve);
+//            //Toast.makeText(this,"Location : " + location.getLatitude() + "/" + location.getLongitude(), Toast.LENGTH_LONG).show();
+//
+//            if (marker != null)
+//                marker.remove();
+//
+//            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+//
+//            return res;
+//        }
+//        return null;
+//    }
 
     //donne à la donnée locationManager la position
     public void getCurrentLocation() {
@@ -241,7 +249,5 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //            googleMap.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
 //        }
     }
-
-
 }
 
