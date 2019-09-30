@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private LocationManager lm;
     private MapFragment mapFragment;
     private GoogleMap googleMap;
+    private String nom_joueur;
 
     ///Chargement et méthodes pour map
 
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         });
 
+        nom_joueur=getIntent().getStringExtra("nom_du_joueur");
+        Toast.makeText(this,"Bonjour "+nom_joueur, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -155,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         double longitude = location.getLongitude();
 
         //messagebox.show()
-        Toast.makeText(this,"Location : " + latitude + "/" + longitude, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"Location : " + latitude + "/" + longitude, Toast.LENGTH_LONG).show();
         if(googleMap != null)
         {
             LatLng googleLocation = new LatLng(latitude,longitude);
