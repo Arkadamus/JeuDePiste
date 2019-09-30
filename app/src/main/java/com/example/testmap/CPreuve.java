@@ -74,7 +74,7 @@ public class CPreuve {
     }
 
     private static String GenerateMouvement() {
-        int rand = (int) Math.round(Math.random() * 4);
+        int rand = (int) Math.round(Math.random() * 3);
         String res = null;
         switch (rand) {
             case 0:
@@ -86,10 +86,6 @@ public class CPreuve {
                 break;
 
             case 2:
-                res = "O";
-                break;
-
-            case 3:
                 res = "A";
                 break;
 
