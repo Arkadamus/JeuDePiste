@@ -3,8 +3,6 @@ package com.example.testmap;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 
 import android.Manifest;
 import android.content.Intent;
@@ -13,25 +11,23 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.CpuUsageInfo;
-import android.os.TokenWatcher;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -43,6 +39,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private GoogleMap googleMap;
     private Marker marker;
 
+    private Button btnOption;
+    private Button btnRealiserTache;
+
+    private CLieu cLieu;
+
     ///Chargement et méthodes pour map
 
     @Override
@@ -52,8 +53,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         android.app.FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
 
-        Button btnOption = (Button) findViewById(R.id.btnOptions);
-        Button btnRealiserTache = (Button) findViewById(R.id.btnRealiserTache);
+        btnOption = (Button) findViewById(R.id.btnOptions);
+        btnRealiserTache = (Button) findViewById(R.id.btnRealiserTache);
 
         btnOption.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,14 +62,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 onClickOption(v);
             }
         });
-
-        final double rayon = 0.013;
-        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GenerateTache();
-            }
-        });
+//        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                GenerateTache();
+//            }
+//        });
     }
 
     @Override
@@ -118,6 +117,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if (requestCode == 1) {
+            GenerateTache();
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
 
@@ -152,16 +160,30 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         });
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        if (cLieu == null)
+            GenerateTache();
+
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+
+        if (NearLocation(latitude, longitude)) {
+            btnRealiserTache.setEnabled(true);
+        }
+    }
+
     ///Boutons
     public void onClickOption(View v) {
         Intent intent = new Intent(this, Options.class);
-        startActivity(intent);
+        startActivityForResult(intent, 1);
     }
 
     ///Methodes autres
     public void GenerateTache() {
+        btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = CPreuve.GeneratePreuve();
-        CLieu cLieu = new CLieu();
+        cLieu = new CLieu();
         cLieu.GeneratePlace();
         cLieu.Addpreuve(cPreuve);
 
@@ -172,45 +194,20 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
         tvDescription.setText(cLieu.getM_preuve().getM_description());
-
+        tvDescription.setMovementMethod(new ScrollingMovementMethod());
     }
 
-//    @SuppressWarnings("MissingPermission")
-//    public double[] CreateLieu(double rayon) {
-//        double rayon = 0.013;//Rayon pour génèrer le lieu (1m=0.000013 (expérimental))
-//        getCurrentLocation();
-//        if (locationManager != null) {
-//            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-//
-//            double latitude = location.getLatitude();
-//            double longitude = location.getLongitude();
-//
-//
-//            double x = Math.random();
-//            x = x * rayon * 2 - rayon;//génère un nombre en [-rayon;+rayon] sur l'axe x
-//
-//            double y = Math.random();
-//            y = y * (rayon + 0.005) * 2 - (rayon + 0.005);//génère un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
-//
-//            double angle = Math.random();
-//            angle = angle * 2 - 1;//génère un nombre [-1;1] pour créer un angle et avoir un cercle
-//            latitude += x * Math.cos(angle);
-//            longitude += y * Math.sin(angle);
-//
-//            double res[] = {latitude, longitude};
-//
-//            //CLieu lieu = new CLieu(nom,latitude,longitude,preuve);
-//            //Toast.makeText(this,"Location : " + location.getLatitude() + "/" + location.getLongitude(), Toast.LENGTH_LONG).show();
-//
-//            if (marker != null)
-//                marker.remove();
-//
-//            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
-//
-//            return res;
-//        }
-//        return null;
-//    }
+    public boolean NearLocation(double latitude, double longitude) {
+        boolean res = false;
+
+        if (cLieu != null) {
+            if (cLieu.getM_latitude() - latitude < Math.abs(0.00013) && cLieu.getM_longitude() - longitude < Math.abs(0.00013)) {
+                res = true;
+            }
+        }
+
+        return res;
+    }
 
     //donne à la donnée locationManager la position
     public void getCurrentLocation() {
@@ -236,18 +233,41 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-//        double latitude = location.getLatitude();
-//        double longitude = location.getLongitude();
-//
-//        //messagebox.show()
-//        Toast.makeText(this,"Location : " + latitude + "/" + longitude, Toast.LENGTH_LONG).show();
-//        if(googleMap != null)
-//        {
-//            LatLng googleLocation = new LatLng(latitude,longitude);
-//            googleMap.moveCamera(CameraUpdateFactory.newLatLng(googleLocation));
-//        }
-    }
+    //    @SuppressWarnings("MissingPermission")
+    ////    public double[] CreateLieu(double rayon) {
+    ////        double rayon = 0.013;//Rayon pour génèrer le lieu ( 1m=0.000013 (expérimental))
+    ////        getCurrentLocation();
+    ////        if (locationManager != null) {
+    ////            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    ////
+    ////            double latitude = location.getLatitude();
+    ////            double longitude = location.getLongitude();
+    ////
+    ////
+    ////            double x = Math.random();
+    ////            x = x * rayon * 2 - rayon;//génère un nombre en [-rayon;+rayon] sur l'axe x
+    ////
+    ////            double y = Math.random();
+    ////            y = y * (rayon + 0.005) * 2 - (rayon + 0.005);//génère un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
+    ////
+    ////            double angle = Math.random();
+    ////            angle = angle * 2 - 1;//génère un nombre [-1;1] pour créer un angle et avoir un cercle
+    ////            latitude += x * Math.cos(angle);
+    ////            longitude += y * Math.sin(angle);
+    ////
+    ////            double res[] = {latitude, longitude};
+    ////
+    ////            //CLieu lieu = new CLieu(nom,latitude,longitude,preuve);
+    ////            //Toast.makeText(this,"Location : " + location.getLatitude() + "/" + location.getLongitude(), Toast.LENGTH_LONG).show();
+    ////
+    ////            if (marker != null)
+    ////                marker.remove();
+    ////
+    ////            marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)));
+    ////
+    ////            return res;
+    ////        }
+    ////        return null;
+    ////    }
 }
 

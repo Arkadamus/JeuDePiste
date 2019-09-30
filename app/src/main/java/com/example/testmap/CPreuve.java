@@ -44,7 +44,7 @@ public class CPreuve {
 
             case 2:
                 preuve = String.valueOf(GenerateDistance());
-                preuve = "Faire " + preuve + " mètres";
+                description = "Faire " + preuve + " mètres";
                 break;
 
             case 3:
@@ -118,31 +118,31 @@ public class CPreuve {
         String res = null;
         switch (rand) {
             case 0:
-                res = "Chat";
+                res = "chat";
                 break;
 
             case 1:
-                res = "Chien";
+                res = "chien";
                 break;
 
             case 2:
-                res = "Arbre";
+                res = "arbre";
                 break;
 
             case 3:
-                res = "Construction";
+                res = "construction";
                 break;
 
             case 4:
-                res = "Voiture";
+                res = "voiture";
                 break;
 
             case 5:
-                res = "Personne";
+                res = "personne";
                 break;
 
             default:
-                res = "Chat";
+                res = "chat";
                 break;
         }
 

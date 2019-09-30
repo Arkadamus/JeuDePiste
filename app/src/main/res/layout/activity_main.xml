@@ -14,6 +14,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:text="Bienvenue, Appuyez sur Réaliser tâche pour commencer"
+            android:scrollbars="vertical"
             android:textAlignment="center"
             android:textSize="14dp">
 
@@ -46,6 +47,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="1"
+            android:enabled="false"
             android:text="Réaliser tâche" />
 
     </LinearLayout>
