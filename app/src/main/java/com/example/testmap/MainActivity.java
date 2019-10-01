@@ -62,12 +62,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 onClickOption(v);
             }
         });
-//        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GenerateTache();
-//            }
-//        });
+        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onClickMicro(v);
+            }
+        });
     }
 
     @Override
@@ -179,9 +179,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         startActivityForResult(intent, 1);
     }
 
+    public void onClickMicro(View v)
+    {
+        Intent intent = new Intent(this,Micro.class);
+        startActivity(intent);
+    }
+
     ///Methodes autres
     public void GenerateTache() {
-        btnRealiserTache.setEnabled(false);
+        //btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = CPreuve.GeneratePreuve();
         cLieu = new CLieu();
         cLieu.GeneratePlace();
