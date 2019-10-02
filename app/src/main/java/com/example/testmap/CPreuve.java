@@ -150,62 +150,31 @@ public class CPreuve {
         String res = null;
         switch (rand) {
             case 0:
-                res = "Allons enfants de la Patrie\n" +
-                        "Le jour de gloire est arrivé\n" +
-                        "Contre nous de la tyrannie\n" +
-                        "L'étendard sanglant est levé";
+                res = "Allons enfants de la Patrie le jour de gloire est arrivé contre nous de la tyrannie l'étendard sanglant est levé";
                 break;
 
             case 1:
-                res = "Wesh alors, wesh alors\n" +
-                        "Wesh alors, wesh alors\n" +
-                        "Wesh alors\n" +
-                        "Sors ta beuh, ta plaquette\n" +
-                        "J'suis dans l'game en claquettes\n" +
-                        "Dans l'carré VIP en survêt'\n" +
-                        "Viens pas me prendre la tête";
+                res = "Wesh alors, wesh alors Wesh alors, wesh alors Wesh alors Sors ta beuh, ta plaquette J'suis dans l'game en claquettes Dans l'carré VIP en survêt' Viens pas me prendre la tête";
                 break;
 
             case 2:
-                res = "Ho ho ho, est-ce que tu m'entends, hey ho\n" +
-                        "Est-ce que tu me sens, hey ho\n" +
-                        "Touche-moi je suis là, hey ho ho ho ho\n" +
-                        "S'il te plait réponds-moi, hey ho\n" +
-                        "Un geste suffira, hey ho\n" +
-                        "Est-ce que tu m'aperçois, hey ho ho ho ho ho";
+                res = "Ho ho ho, est-ce que tu m'entends, hey ho Est-ce que tu me sens, hey ho Touche-moi je suis là, hey ho ho ho ho S'il te plait réponds-moi, hey ho Un geste suffira, hey ho Est-ce que tu m'aperçois, hey ho ho ho ho ho";
                 break;
 
             case 3:
-                res = "C'était un cordonnier, sans rien d'particulier\n" +
-                        "Dans un village dont le nom m'a échappé\n" +
-                        "Il faisait des souliers si jolis, si légers\n" +
-                        "Que nos vies semblaient un peu moins lourdes à porter";
+                res = "C'était un cordonnier, sans rien d'particulier Dans un village dont le nom m'a échappé Il faisait des souliers si jolis, si légers Que nos vies semblaient un peu moins lourdes à porter";
                 break;
 
             case 4:
-                res = "Terre brûlée au vent\n" +
-                        "Des landes de pierres\n" +
-                        "Autour des lacs, c'est pour les vivants\n" +
-                        "Un peu d'enfer, le Connemara\n" +
-                        "Des nuages noirs qui viennent du nord\n" +
-                        "Colorent la terre, les lacs, les rivières\n" +
-                        "C'est le décor du Connemara";
+                res = "Terre brûlée au vent Des landes de pierres Autour des lacs, c'est pour les vivants Un peu d'enfer, le Connemara Des nuages noirs qui viennent du nord Colorent la terre, les lacs, les rivières C'est le décor du Connemara";
                 break;
 
             case 5:
-                res = "Dans un voyage en Absurdie\n" +
-                        "Que je fais lorsque je m'ennuie\n" +
-                        "J'ai imaginé sans complexe\n" +
-                        "Qu'un matin je changeais de sexe\n" +
-                        "Que je vivais l'étrange drame\n" +
-                        "D'être une femme";
+                res = "Dans un voyage en Absurdie Que je fais lorsque je m'ennuie J'ai imaginé sans complexe Qu'un matin je changeais de sexe Que je vivais l'étrange drame D'être une femme";
                 break;
 
             default:
-                res = "Allons enfants de la Patrie\n" +
-                        "Le jour de gloire est arrivé\n" +
-                        "Contre nous de la tyrannie\n" +
-                        "L'étendard sanglant est levé";
+                res = "Allons enfants de la Patrie le jour de gloire est arrivé contre nous de la tyrannie l'étendard sanglant est levé";
                 break;
         }
 
@@ -248,6 +217,10 @@ public class CPreuve {
 
     public String getM_description() {
         return m_description;
+    }
+
+    public String getM_preuve() {
+        return m_preuve;
     }
 }
 

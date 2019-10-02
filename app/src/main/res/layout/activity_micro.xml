@@ -15,8 +15,9 @@
             android:id="@+id/voiceInput"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Coucou"
-            android:textSize="20sp"/>
+            android:text="Appuyez sur le micro pour commencer l'enregistrement"
+            android:textAlignment="center"
+            android:textSize="20sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -32,21 +33,23 @@
 
         <ImageButton
             android:id="@+id/btnSpeak"
-            android:layout_weight="2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:background="@null"
             android:padding="25dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_mic" />
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_weight="1"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/btnOK"
+            android:enabled="false"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/btnSpeak"
-            android:layout_margin="10dp"
-            android:text="hint" />
+            android:layout_weight="2"
+            android:padding="25dp"
+            android:text="OK"
+            android:textSize="20sp" />
+
     </LinearLayout>
 </LinearLayout>
