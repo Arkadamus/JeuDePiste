@@ -1,4 +1,4 @@
-package com.example.testmap;
+﻿package com.example.testmap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private LocationManager locationManager;
     private MapFragment mapFragment;
     private GoogleMap googleMap;
+
     private Marker marker;
 
     private Button btnOption;
