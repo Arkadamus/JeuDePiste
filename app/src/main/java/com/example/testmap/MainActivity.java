@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private Button btnRealiserTache;
 
     private CLieu cLieu;
-
+    private String nom_joueur;
     ///Chargement et méthodes pour map
 
     @Override
@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 //                GenerateTache();
 //            }
 //        });
+        
+        nom_joueur=getIntent().getStringExtra("nom_du_joueur");
+        Toast.makeText(this,"Bonjour "+nom_joueur, Toast.LENGTH_LONG).show();
     }
 
     @Override
