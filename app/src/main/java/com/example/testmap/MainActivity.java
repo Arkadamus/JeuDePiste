@@ -1,4 +1,4 @@
-﻿package com.example.testmap;
+package com.example.testmap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,15 +37,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     private LocationManager locationManager;
     private MapFragment mapFragment;
     private GoogleMap googleMap;
-
-    private Marker marker;
-
-    private Button btnOption;
-    private Button btnRealiserTache;
+    private Marker marker = null;
 
     private CLieu cLieu;
-    private String nom_joueur;
-    ///Chargement et méthodes pour map
+    private CProfile cProfile;
+    private String nomJoueur;
+
+    private Button btnRealiserTache;
+    private Button btnOption;
+    ///Chargement et m?thodes pour map
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +63,24 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 onClickOption(v);
             }
         });
+
 //        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                GenerateTache();
 //            }
 //        });
-        
-        nom_joueur=getIntent().getStringExtra("nom_du_joueur");
-        Toast.makeText(this,"Bonjour "+nom_joueur, Toast.LENGTH_LONG).show();
+
+        nomJoueur = getIntent().getStringExtra("nom_du_joueur");
+
+        CSave save = Serialize.Deserialization(this, "SaveCluedOrleans.ser");
+        if (save != null && nomJoueur != null)
+            for (CProfile profile : save.getM_listProfile()) {
+                if (profile.equals(nomJoueur))
+                    cProfile = profile;
+            }
+
+        Toast.makeText(this, "Bonjour " + nomJoueur, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -79,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     //@SuppressWarnings("MissingPermission")
     protected void onResume() {
         super.onResume();
-
         CheckPermissions();
     }
 
@@ -180,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     ///Boutons
     public void onClickOption(View v) {
         Intent intent = new Intent(this, Options.class);
+        intent.putExtra("nomJoueur", nomJoueur);
         startActivityForResult(intent, 1);
     }
 
@@ -194,7 +203,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if (marker != null)
             marker.remove();
 
-        marker = googleMap.addMarker(new MarkerOptions().title(cLieu.getM_nom()).position(new LatLng(cLieu.getM_latitude(), cLieu.getM_longitude())));
+        if (googleMap != null)
+            marker = googleMap.addMarker(new MarkerOptions().title(cLieu.getM_nom()).position(new LatLng(cLieu.getM_latitude(), cLieu.getM_longitude())));
 
         TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
         tvDescription.setText(cLieu.getM_preuve().getM_description());
@@ -213,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         return res;
     }
 
-    //donne à la donnée locationManager la position
+    //donne ? la donn?e locationManager la position
     public void getCurrentLocation() {
         try {
             locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -224,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
 
-    ///Méthodes inutilisées mais insupprimables
+    ///M?thodes inutilis?es mais insupprimables
     @Override
     public void onProviderDisabled(String s) {
     }
@@ -239,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     //    @SuppressWarnings("MissingPermission")
     ////    public double[] CreateLieu(double rayon) {
-    ////        double rayon = 0.013;//Rayon pour génèrer le lieu ( 1m=0.000013 (expérimental))
+    ////        double rayon = 0.013;//Rayon pour g?n?rer le lieu ( 1m=0.000013 (exp?rimental))
     ////        getCurrentLocation();
     ////        if (locationManager != null) {
     ////            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -249,13 +259,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     ////
     ////
     ////            double x = Math.random();
-    ////            x = x * rayon * 2 - rayon;//génère un nombre en [-rayon;+rayon] sur l'axe x
+    ////            x = x * rayon * 2 - rayon;//g?n?re un nombre en [-rayon;+rayon] sur l'axe x
     ////
     ////            double y = Math.random();
-    ////            y = y * (rayon + 0.005) * 2 - (rayon + 0.005);//génère un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
+    ////            y = y * (rayon + 0.005) * 2 - (rayon + 0.005);//g?n?re un nombre en [-rayon;+rayon] sur l'axe y. Petit boost sur la longiotude pour avoir un meilleur cercle ???
     ////
     ////            double angle = Math.random();
-    ////            angle = angle * 2 - 1;//génère un nombre [-1;1] pour créer un angle et avoir un cercle
+    ////            angle = angle * 2 - 1;//g?n?re un nombre [-1;1] pour cr?er un angle et avoir un cercle
     ////            latitude += x * Math.cos(angle);
     ////            longitude += y * Math.sin(angle);
     ////

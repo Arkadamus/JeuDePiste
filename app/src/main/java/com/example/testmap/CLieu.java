@@ -2,7 +2,9 @@ package com.example.testmap;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class CLieu {
+import java.io.Serializable;
+
+public class CLieu implements Serializable {
     private double m_latitude, m_longitude;
     private String m_nom;
     private CPreuve m_preuve;

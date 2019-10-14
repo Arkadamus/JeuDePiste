@@ -9,6 +9,8 @@ import android.widget.Button;
 
 public class Options extends AppCompatActivity {
 
+    private CProfile cProfile;
+
     private Button btnChangerLieu;
 
     @Override
@@ -28,5 +30,13 @@ public class Options extends AppCompatActivity {
                 finish();
             }
         });
+
+        String temp = getIntent().getStringExtra("nomJoueur");
+        CSave save = Serialize.Deserialization(this, "SaveCluedOrleans.ser");
+        if (save != null && temp != null)
+            for (CProfile profile : save.getM_listProfile()) {
+                if (profile.equals(temp))
+                    cProfile = profile;
+            }
     }
 }

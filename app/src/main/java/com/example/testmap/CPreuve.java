@@ -1,6 +1,8 @@
 package com.example.testmap;
 
-public class CPreuve {
+import java.io.Serializable;
+
+public class CPreuve implements Serializable {
     private String m_nom, m_description, m_preuve;
 
     public enum enumPreuve //6 choix
