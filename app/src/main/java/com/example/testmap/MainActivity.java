@@ -209,7 +209,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if (marker != null)
             marker.remove();
 
-        marker = googleMap.addMarker(new MarkerOptions().title(cLieu.getM_nom()).position(new LatLng(cLieu.getM_latitude(), cLieu.getM_longitude())));
+        if (googleMap != null)
+            marker = googleMap.addMarker(new MarkerOptions().title(cLieu.getM_nom()).position(new LatLng(cLieu.getM_latitude(), cLieu.getM_longitude())));
 
         TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
         tvDescription.setText(cLieu.getM_preuve().getM_description());
