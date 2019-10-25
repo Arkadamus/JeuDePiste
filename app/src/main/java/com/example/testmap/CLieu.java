@@ -1,7 +1,5 @@
 package com.example.testmap;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
 
 public class CLieu implements Serializable {

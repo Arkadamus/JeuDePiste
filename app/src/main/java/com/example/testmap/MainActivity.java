@@ -15,8 +15,6 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,8 +43,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     private Button btnRealiserTache;
     private Button btnOption;
-    ///Chargement et m?thodes pour map
 
+    //region Chargement et methodes pour map
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 if (profile.equals(nomJoueur))
                     cProfile = profile;
             }
-
-        Toast.makeText(this, "Bonjour " + nomJoueur, Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -184,15 +180,17 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             btnRealiserTache.setEnabled(true);
         }
     }
+    //endregion
 
-    ///Boutons
+    //region Boutons
     public void onClickOption(View v) {
         Intent intent = new Intent(this, Options.class);
         intent.putExtra("nomJoueur", nomJoueur);
         startActivityForResult(intent, 1);
     }
+    //endregion
 
-    ///Methodes autres
+    //region Methodes autres
     public void GenerateTache() {
         btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = CPreuve.GeneratePreuve();
@@ -219,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 res = true;
             }
         }
-
         return res;
     }
 
@@ -232,9 +229,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             e.printStackTrace();
         }
     }
+    //endregion
 
-
-    ///M?thodes inutilis?es mais insupprimables
+    //region Methodes inutilisees mais insupprimables
     @Override
     public void onProviderDisabled(String s) {
     }
@@ -283,5 +280,5 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     ////        }
     ////        return null;
     ////    }
+    //endregion
 }
-

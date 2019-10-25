@@ -5,14 +5,13 @@ import java.io.Serializable;
 public class CPreuve implements Serializable {
     private String m_nom, m_description, m_preuve;
 
-    public enum enumPreuve //6 choix
+    public enum enumPreuve //5 choix
     {
         Mouvement,
         Pas,
         Distance,
         Photo,
-        Parler,
-        Enregistrer
+        Parler
     }
 
     public CPreuve() {
@@ -27,7 +26,7 @@ public class CPreuve implements Serializable {
 
     ///Methodes pour générer le random dans les preuves
     public static CPreuve GeneratePreuve() {
-        int rand = (int) Math.round(Math.random() * 6);
+        int rand = (int) Math.round(Math.random() * 5);
         enumPreuve enumpreuve = enumPreuve.values()[rand];
 
         String description = null;
@@ -57,11 +56,6 @@ public class CPreuve implements Serializable {
             case 4:
                 preuve = GenerateParler();
                 description = "Chanter " + preuve;
-                break;
-
-            case 5:
-                preuve = GenerateEnregistrer();
-                description = "Enregistrer le bruit de " + preuve;
                 break;
 
             default:
@@ -215,34 +209,6 @@ public class CPreuve implements Serializable {
                 break;
         }
 
-        return res;
-    }
-
-    private static String GenerateEnregistrer() {
-        int rand = (int) Math.round(Math.random() * 4);
-        String res = null;
-        switch (rand) {
-            case 0:
-                res = "Voitures";
-                break;
-
-            case 1:
-                res = "Klaxons";
-                break;
-
-            case 2:
-                res = "Animaux";
-                break;
-
-            case 3:
-                res = "Travaux";
-                break;
-
-
-            default:
-                res = "Voiture";
-                break;
-        }
         return res;
     }
 
