@@ -15,6 +15,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -128,8 +129,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
-        if (requestCode == 1) {
+        if (requestCode == 1)
             GenerateTache();
+
+        if (requestCode == 2) {
+            String textVoice = data.getStringExtra("EXTRA_TEXTVOICE");
+
+            if (ValidVoice(textVoice)) {
+                ValidTache();
+                Toast.makeText(this, "La tâche est accomplie", Toast.LENGTH_SHORT).show();
+                GenerateTache();
+            } else
+                Toast.makeText(this, "La tâche n'est pas accomplie, veuillez essayer à nouveau", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -190,9 +201,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
     //endregion
 
-    //region Methodes autres
+
+    public void onClickMicro(View v) {
+        Intent intent = new Intent(this, Micro.class);
+        startActivityForResult(intent, 0);
+    }
+
+    ///Methodes autres
+    public void ValidTache() {
+        //Ajouter le code pour l'inclure dans une list de CLieu accomplis dans une class CProfil
+    }
+
     public void GenerateTache() {
-        btnRealiserTache.setEnabled(false);
+        //btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = CPreuve.GeneratePreuve();
         cLieu = new CLieu();
         cLieu.GeneratePlace();
@@ -231,7 +252,16 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
     //endregion
 
-    //region Methodes inutilisees mais insupprimables
+    public boolean ValidVoice(String textVoice) {
+        boolean res = false;
+        if (cLieu.getM_preuve().getM_preuve().toLowerCase() == textVoice.toLowerCase())
+            res = true;
+
+        return res;
+    }
+
+
+    ///Méthodes inutilisées mais insupprimables
     @Override
     public void onProviderDisabled(String s) {
     }
