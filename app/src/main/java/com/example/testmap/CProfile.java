@@ -19,17 +19,15 @@ public class CProfile implements Serializable {
         m_listLieu = listLieu;
     }
 
-    public boolean Login(String password)
-    {
+    public boolean Login(String password) {
         boolean res = false;
-        if(m_password.equals(password))
+        if (m_password.equals(password))
             res = true;
 
         return res;
     }
 
-    public void EnregistrerProfil(String nom, String password)
-    {
+    public void EnregistrerProfil(String nom, String password) {
         m_nom = nom;
         m_password = password;
     }

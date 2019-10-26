@@ -29,6 +29,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        //Serialize.ResetFile(this,fileName);
         btnEnregistrer = (Button) findViewById(R.id.btnEnregistrer);
         btnValider = (Button) findViewById(R.id.btnValider);
 
@@ -60,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             for (CProfile profile : save.getM_listProfile()) {
                 if (profile != null) {
                     if (profile.Login(etPassword.getText().toString())) {
-                        //Toast.makeText(this, "Lancement", Toast.LENGTH_LONG).show();
                         CommencerJeu(v);
                         temp = true;
                     }
@@ -74,7 +74,6 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void Enregistrer(View v) {
-        //Serialize.ResetFile(this,"SaveCluedOrleans.ser");
         if (etText.getText().toString() != "" && etPassword.getText().toString() != "") {
             CProfile profile = new CProfile();
             profile.EnregistrerProfil(etText.getText().toString(), etPassword.getText().toString());

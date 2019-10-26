@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,12 +65,9 @@ public class Options extends AppCompatActivity {
 
     ///Méthodes autres
     public void SetListView() {
-        ArrayList<CLieu> listLieu = new ArrayList<CLieu>();
+        ArrayList<CLieu> listLieu = (ArrayList<CLieu>) cProfile.getM_listLieu();
         CLieuAdapter adapter = new CLieuAdapter(this, listLieu);
         lvProfil.setAdapter(adapter);
-
-        adapter.add(new CLieu("Lieu 1", 42.0005, 42.0005, CPreuve.GeneratePreuve()));
-        adapter.add(new CLieu("Lieu 2", 75.0002, 75.0002, CPreuve.GeneratePreuve()));
     }
 }
 

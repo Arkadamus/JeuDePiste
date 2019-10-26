@@ -25,48 +25,43 @@ public class CPreuve implements Serializable {
     }
 
     ///Methodes pour générer le random dans les preuves
-    public static CPreuve GeneratePreuve() {
+    public void GeneratePreuve() {
         int rand = (int) Math.round(Math.random() * 5);
-        enumPreuve enumpreuve = enumPreuve.values()[rand];
+        rand = 4;
+        m_nom = enumPreuve.values()[rand].toString();
 
-        String description = null;
-        String preuve = null;
 
         switch (rand) {
             case 0:
-                preuve = GenerateMouvement();
-                description = "Faire un mouvement en forme de " + preuve + " avec le portable";
+                m_preuve = GenerateMouvement();
+                m_description = "Faire un mouvement en forme de " + m_preuve + " avec le portable";
                 break;
 
             case 1:
-                preuve = String.valueOf(GeneratePas());
-                description = "Faire " + preuve + " pas";
+                m_preuve = String.valueOf(GeneratePas());
+                m_description = "Faire " + m_preuve + " pas";
                 break;
 
             case 2:
-                preuve = String.valueOf(GenerateDistance());
-                description = "Faire " + preuve + " mètres";
+                m_preuve = String.valueOf(GenerateDistance());
+                m_description = "Faire " + m_preuve + " mètres";
                 break;
 
             case 3:
-                preuve = GeneratePhoto();
-                description = "Prendre " + preuve + " en photo";
+                m_preuve = GeneratePhoto();
+                m_description = "Prendre " + m_preuve + " en photo";
                 break;
 
             case 4:
-                preuve = GenerateParler();
-                description = "Chanter " + preuve;
+                m_preuve = GenerateParler();
+                m_description = "Chanter : " + m_preuve;
                 break;
 
             default:
-                preuve = GenerateMouvement();
-                description = "Faire un mouvement en forme de " + preuve + " avec le portable";
+                m_preuve = GenerateMouvement();
+                m_description = "Faire un mouvement en forme de " + m_preuve + " avec le portable";
                 break;
         }
-
-        CPreuve cPreuve = new CPreuve(enumpreuve.toString(), description, preuve);
-
-        return cPreuve;
     }
 
     private static String GenerateMouvement() {
@@ -150,11 +145,11 @@ public class CPreuve implements Serializable {
                 break;
 
             case 1:
-                res = "Wesh alors, wesh alors Wesh alors, wesh alors Wesh alors Sors ta beuh, ta plaquette J'suis dans l'game en claquettes Dans l'carré VIP en survêt' Viens pas me prendre la tête";
+                res = "Wesh alors, wesh alors Sors ta beuh, ta plaquette J'suis dans l'game en claquettes Dans l'carré VIP en survêt' Viens pas me prendre la tête";
                 break;
 
             case 2:
-                res = "Ho ho ho, est-ce que tu m'entends, hey ho Est-ce que tu me sens, hey ho Touche-moi je suis là, hey ho ho ho ho S'il te plait réponds-moi, hey ho Un geste suffira, hey ho Est-ce que tu m'aperçois, hey ho ho ho ho ho";
+                res = "Ho ho ho, est-ce que tu m'entends, hey ho Est-ce que tu me sens, hey ho Touche-moi je suis là, hey ho ho ho ho S'il te plait réponds-moi, hey ho Un geste suffira, hey ho Est-ce que tu m'aperçois";
                 break;
 
             case 3:
@@ -162,7 +157,7 @@ public class CPreuve implements Serializable {
                 break;
 
             case 4:
-                res = "Terre brûlée au vent Des landes de pierres Autour des lacs, c'est pour les vivants Un peu d'enfer, le Connemara Des nuages noirs qui viennent du nord Colorent la terre, les lacs, les rivières C'est le décor du Connemara";
+                res = "Terre brûlée au vent Des landes de pierres Autour des lacs, c'est pour les vivants Un peu d'enfer, le Connemara Des nuages noirs qui viennent du nord Colorent la terre, les lacs, les rivières";
                 break;
 
             case 5:

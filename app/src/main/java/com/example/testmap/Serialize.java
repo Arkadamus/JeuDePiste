@@ -24,7 +24,7 @@ public class Serialize {
             os.close();
             fos.close();
         } catch (IOException e) {
-            Toast.makeText(context, "Echec", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "Echec", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -40,7 +40,7 @@ public class Serialize {
             is.close();
             fis.close();
         } catch (IOException | ClassNotFoundException e) {
-            Toast.makeText(context, "Echec", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "Echec", Toast.LENGTH_LONG).show();
         }
         return save;
     }

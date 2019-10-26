@@ -63,19 +63,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
         });
 
-//        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GenerateTache();
-//            }
-//        });
+        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         nomJoueur = getIntent().getStringExtra("nom_du_joueur");
-
         CSave save = Serialize.Deserialization(this, "SaveCluedOrleans.ser");
         if (save != null && nomJoueur != null)
             for (CProfile profile : save.getM_listProfile()) {
-                if (profile.equals(nomJoueur))
+                if (profile.getM_nom().equals(nomJoueur))
                     cProfile = profile;
             }
     }
@@ -129,10 +128,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // check if the request code is same as what is passed  here it is 2
-        if (requestCode == 1)
+        if (resultCode == 1)
             GenerateTache();
 
-        if (requestCode == 2) {
+        if (resultCode == 2) {
             String textVoice = data.getStringExtra("EXTRA_TEXTVOICE");
 
             if (ValidVoice(textVoice)) {
@@ -199,22 +198,29 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         intent.putExtra("nomJoueur", nomJoueur);
         startActivityForResult(intent, 1);
     }
-    //endregion
-
 
     public void onClickMicro(View v) {
         Intent intent = new Intent(this, Micro.class);
+        intent.putExtra("chanson",cLieu.getM_preuve().getM_description());
         startActivityForResult(intent, 0);
     }
+    //endregion
 
-    ///Methodes autres
+    //region Methodes autres
     public void ValidTache() {
-        //Ajouter le code pour l'inclure dans une list de CLieu accomplis dans une class CProfil
+        CSave save = Serialize.Deserialization(this, "SaveCluedOrleans.ser");
+        for (CProfile profile : save.getM_listProfile() ) {
+            if(profile.getM_nom().equals(cProfile.getM_nom()))
+                profile.getM_listLieu().add(cLieu);
+        }
+        Serialize.Serialization(this,save,"SaveCluedOrleans.ser");
+
     }
 
     public void GenerateTache() {
         //btnRealiserTache.setEnabled(false);
-        CPreuve cPreuve = CPreuve.GeneratePreuve();
+        CPreuve cPreuve = new CPreuve();
+        cPreuve.GeneratePreuve();
         cLieu = new CLieu();
         cLieu.GeneratePlace();
         cLieu.Addpreuve(cPreuve);
@@ -250,18 +256,62 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             e.printStackTrace();
         }
     }
-    //endregion
 
     public boolean ValidVoice(String textVoice) {
         boolean res = false;
-        if (cLieu.getM_preuve().getM_preuve().toLowerCase() == textVoice.toLowerCase())
-            res = true;
+        if (cLieu.getM_preuve().getM_nom().equals("Parler")) {
+            int rand = -1;
 
+            if (cLieu.getM_preuve().getM_preuve().contains("tyrannie")) //Marseillaise
+                rand = 0;
+            if (cLieu.getM_preuve().getM_preuve().contains("Wesh")) //Wesh alors
+                rand = 1;
+            if (cLieu.getM_preuve().getM_preuve().contains("geste")) //Hey ho
+                rand = 2;
+            if (cLieu.getM_preuve().getM_preuve().contains("cordonnier")) //Changeait la vie
+                rand = 3;
+            if (cLieu.getM_preuve().getM_preuve().contains("Terre")) //Connemara
+                rand = 4;
+            if (cLieu.getM_preuve().getM_preuve().contains("femme")) //Femme
+                rand = 5;
+
+            switch (rand) {
+                case 0:
+                    if (textVoice.toLowerCase().contains("patrie") && textVoice.toLowerCase().contains("tyrannie") && textVoice.toLowerCase().contains("sanglant"))
+                        res = true;
+                    break;
+
+                case 1:
+                    if (textVoice.toLowerCase().contains("wesh") && textVoice.toLowerCase().contains("plaquette") && textVoice.toLowerCase().contains("vip"))
+                        res = true;
+                    break;
+
+                case 2:
+                    if (textVoice.toLowerCase().contains("entends") && textVoice.toLowerCase().contains("touche") && textVoice.toLowerCase().contains("geste"))
+                        res = true;
+                    break;
+
+                case 3:
+                    if (textVoice.toLowerCase().contains("cordonnier") && textVoice.toLowerCase().contains("échapp") && textVoice.toLowerCase().contains("vie"))
+                        res = true;
+                    break;
+
+                case 4:
+                    if (textVoice.toLowerCase().contains("terre") && textVoice.toLowerCase().contains("enfer") && textVoice.toLowerCase().contains("noir"))
+                        res = true;
+                    break;
+
+                case 5:
+                    if (textVoice.toLowerCase().contains("absurdie") && textVoice.toLowerCase().contains("femme") && textVoice.toLowerCase().contains("sexe"))
+                        res = true;
+                    break;
+            }
+        }
         return res;
     }
+    //endregion
 
-
-    ///Méthodes inutilisées mais insupprimables
+    //region Méthodes inutilisées mais insupprimables
     @Override
     public void onProviderDisabled(String s) {
     }

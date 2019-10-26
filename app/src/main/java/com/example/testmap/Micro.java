@@ -43,6 +43,8 @@ public class Micro extends AppCompatActivity {
                 startVoicInput();
             }
         });
+
+        tvVoiceInput.setText(getIntent().getStringExtra("chanson"));
     }
 
     ///Buttons
