@@ -9,7 +9,6 @@ import android.accounts.AccountManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -42,14 +41,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-//non-reconnus sur mon PC//////////////////////////////////////
-///////////////////////////////////////////////////////////////
-
 public class CameraActivity extends AppCompatActivity {
     private static String accessToken;
+    static final int REQUEST_IMAGE_CAPTURE = 9;
     static final int REQUEST_GALLERY_IMAGE = 10;
     static final int REQUEST_CODE_PICK_ACCOUNT = 11;
     static final int REQUEST_ACCOUNT_AUTHORIZATION = 12;
@@ -73,7 +71,6 @@ public class CameraActivity extends AppCompatActivity {
         selectImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //a besoin de "import android.support.v4.app.ActivityCompat;" ligne 15 pour fonctionner
                 ActivityCompat.requestPermissions(CameraActivity.this,
                         new String[]{Manifest.permission.GET_ACCOUNTS},
                         REQUEST_PERMISSIONS);
@@ -82,17 +79,21 @@ public class CameraActivity extends AppCompatActivity {
     }
 
     private void launchImagePicker() {
-        Intent intent = new Intent();
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE);
+        }
+        /*Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select an image"),
-                REQUEST_GALLERY_IMAGE);
+                REQUEST_GALLERY_IMAGE);*/
+
     }
 
-    //les NonNull passés en commentaire risques de créer un exception
     @Override
-    public void onRequestPermissionsResult(int requestCode, /*@NonNull*/ String[] permissions,
-            /*@NonNull*/ int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_PERMISSIONS:
@@ -107,9 +108,27 @@ public class CameraActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK && data != null) {
-            uploadImage(data.getData());
-        } else if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK && data != null) {
+            //uploadImage(data.getData());
+
+            if (data.getExtras() != null) {
+                try {
+                    //Bitmap bitmap = resizeBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData()));
+                    Bundle extras = data.getExtras();
+                    Bitmap bitmap = (Bitmap) extras.get("data");
+                    callCloudVision(bitmap);
+                    selectedImage.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    Log.e(LOG_TAG, e.getMessage());
+                }
+            } else {
+                Log.e(LOG_TAG, "Null image was returned.");
+            }
+
+        }
+        /*if (requestCode == REQUEST_GALLERY_IMAGE && resultCode == RESULT_OK && data != null) {
+            uploadImage(data.getData());*/
+        else if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
             if (resultCode == RESULT_OK) {
                 String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 AccountManager am = AccountManager.get(this);
@@ -136,7 +155,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    public void uploadImage(Uri uri) {
+    /*public void uploadImage(Uri uri) {
         if (uri != null) {
             try {
                 Bitmap bitmap = resizeBitmap(
@@ -149,7 +168,7 @@ public class CameraActivity extends AppCompatActivity {
         } else {
             Log.e(LOG_TAG, "Null image was returned.");
         }
-    }
+    }*/
 
     private void callCloudVision(final Bitmap bitmap) throws IOException {
         resultTextView.setText("Retrieving results from cloud");
