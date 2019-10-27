@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void GenerateTache() {
-        //btnRealiserTache.setEnabled(false);
+        btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = new CPreuve();
         cPreuve.GeneratePreuve();
         cLieu = new CLieu();
