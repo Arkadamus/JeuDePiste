@@ -25,7 +25,7 @@ public class CPreuve implements Serializable {
     ///Methodes pour générer le random dans les preuves
     public void GeneratePreuve() {
         int rand = (int) Math.round(Math.random() * 3);
-        rand = 2;
+        rand = 1;
         m_nom = enumPreuve.values()[rand].toString();
 
 

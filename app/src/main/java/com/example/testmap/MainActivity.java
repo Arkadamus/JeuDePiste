@@ -27,11 +27,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
     //Pour la permission
@@ -60,6 +55,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         btnOption = (Button) findViewById(R.id.btnOptions);
         btnRealiserTache = (Button) findViewById(R.id.btnRealiserTache);
 
+        nomJoueur = getIntent().getStringExtra("nom_du_joueur");
+        CSave save = Serialize.Deserialization(this, "SaveCluedOrleans.ser");
+        if (save != null && nomJoueur != null)
+            for (CProfile profile : save.getM_listProfile()) {
+                if (profile.getM_nom().equals(nomJoueur))
+                    cProfile = profile;
+            }
+
         btnOption.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,17 +73,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         btnRealiserTache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ChoixTache(v);
+                onClickCamera(v);
             }
         });
-
-        nomJoueur = getIntent().getStringExtra("nom_du_joueur");
-        CSave save = Serialize.Deserialization(this, "SaveCluedOrleans.ser");
-        if (save != null && nomJoueur != null)
-            for (CProfile profile : save.getM_listProfile()) {
-                if (profile.getM_nom().equals(nomJoueur))
-                    cProfile = profile;
-            }
     }
 
     //permet de passer outre le checkpermission mais c'est pas fou
@@ -145,9 +140,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             } else
                 Toast.makeText(this, "La tâche n'est pas accomplie, veuillez essayer à nouveau", Toast.LENGTH_SHORT).show();
         }
-        if(requestCode == 3){
+        if (requestCode == 3) {
             String labelImage = data.getStringExtra("EXTRA_LABELIMAGE");
-            Toast.makeText(this,labelImage,Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, labelImage, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -178,9 +173,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                     CameraPosition cameraPosition = new CameraPosition(latLng, 15, 0, 0);//latlng/zoom/0/0
                     googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-//            TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
-////            tvDescription.setText("x : " + location.getLatitude() + "y : "+location.getLongitude() );
-////            tvDescription.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -212,6 +204,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         intent.putExtra("chanson", cLieu.getM_preuve().getM_description());
         startActivityForResult(intent, 0);
     }
+
+    public void onClickCamera(View v) {
+        Intent intent = new Intent(this, CameraActivity.class);
+        startActivity(intent);
+    }
     //endregion
 
     //region Methodes autres
@@ -222,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 break;
 
             case "Photo":
-
+                onClickCamera(v);
                 break;
 
             case "Parler":
@@ -242,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void GenerateTache() {
-        btnRealiserTache.setEnabled(false);
+        //btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = new CPreuve();
         cPreuve.GeneratePreuve();
 
@@ -349,10 +346,6 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
 
-    public void onClickCamera(View v){
-        Intent intent = new Intent(this,CameraActivity.class);
-        startActivity(intent);
-    }
 
     //    @SuppressWarnings("MissingPermission")
     ////    public double[] CreateLieu(double rayon) {
