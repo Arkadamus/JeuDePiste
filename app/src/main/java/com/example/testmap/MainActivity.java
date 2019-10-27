@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -21,11 +22,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
@@ -79,9 +83,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             }
     }
 
-    @Override
-    // permet de passer outre le checkpermission mais c'est pas fou
+    //permet de passer outre le checkpermission mais c'est pas fou
     //@SuppressWarnings("MissingPermission")
+    @Override
     protected void onResume() {
         super.onResume();
         CheckPermissions();
@@ -140,6 +144,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 GenerateTache();
             } else
                 Toast.makeText(this, "La tâche n'est pas accomplie, veuillez essayer à nouveau", Toast.LENGTH_SHORT).show();
+        }
+        if(requestCode == 3){
+            String labelImage = data.getStringExtra("EXTRA_LABELIMAGE");
+            Toast.makeText(this,labelImage,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -237,6 +245,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = new CPreuve();
         cPreuve.GeneratePreuve();
+
         cLieu = new CLieu();
         cLieu.GeneratePlace();
         cLieu.Addpreuve(cPreuve);
@@ -338,6 +347,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    public void onClickCamera(View v){
+        Intent intent = new Intent(this,CameraActivity.class);
+        startActivity(intent);
     }
 
     //    @SuppressWarnings("MissingPermission")
