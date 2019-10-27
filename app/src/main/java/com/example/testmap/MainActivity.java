@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         btnRealiserTache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                onClickCamera(v);
             }
         });
 
@@ -126,7 +126,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             GenerateTache();
         }
         if(requestCode == 3){
-
+            String labelImage = data.getStringExtra("EXTRA_LABELIMAGE");
+            Toast.makeText(this,labelImage,Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -186,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     ///Methodes autres
     public void GenerateTache() {
-        btnRealiserTache.setEnabled(false);
+        //btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = CPreuve.GeneratePreuve();
         cLieu = new CLieu();
         cLieu.GeneratePlace();
@@ -241,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     public void onClickCamera(View v){
         Intent intent = new Intent(this,CameraActivity.class);
-        startActivityForResult(intent,3);
+        startActivity(intent);
     }
 
     //    @SuppressWarnings("MissingPermission")

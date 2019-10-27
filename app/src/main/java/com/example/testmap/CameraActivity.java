@@ -57,14 +57,17 @@ public class CameraActivity extends AppCompatActivity {
     private final String LOG_TAG = "CameraActivity";
     private ImageView selectedImage;
     private TextView resultTextView;
+    private Button selectImageButton;
     Account mAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Button selectImageButton = (Button) findViewById(R.id
-                .select_image_button);
+
+        //Intent intent = getIntent();
+
+        setContentView(R.layout.activity_camera);
+        selectImageButton = (Button) findViewById(R.id.select_image_button);
         selectedImage = (ImageView) findViewById(R.id.selected_image);
         resultTextView = (TextView) findViewById(R.id.result);
         selectImageButton.setOnClickListener(new View.OnClickListener() {
@@ -284,7 +287,7 @@ public class CameraActivity extends AppCompatActivity {
             pickUserAccount();
         } else {
             //ne voit pas le constructeur de CGetTokenTask.java
-           new CGetTokenTask(CameraActivity.this, mAccount, SCOPE, REQUEST_ACCOUNT_AUTHORIZATION)
+            new CGetTokenTask(CameraActivity.this, mAccount, SCOPE, REQUEST_ACCOUNT_AUTHORIZATION)
                     .execute();
         }
     }
