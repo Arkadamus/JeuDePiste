@@ -1,4 +1,4 @@
-﻿package com.example.testmap;
+package com.example.testmap;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,9 +74,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         Toast.makeText(this,"Bonjour "+nom_joueur, Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    // permet de passer outre le checkpermission mais c'est pas fou
+    //permet de passer outre le checkpermission mais c'est pas fou
     //@SuppressWarnings("MissingPermission")
+    @Override
     protected void onResume() {
         super.onResume();
 

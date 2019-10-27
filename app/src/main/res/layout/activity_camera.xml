@@ -6,4 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".CameraActivity">
 
+    <Button
+        android:id="@+id/select_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Select Image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selected_image" />
+
+    <ImageView
+        android:id="@+id/selected_image"
+        android:layout_width="411dp"
+        android:layout_height="295dp"
+        android:layout_below="@+id/selected_image_txt"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/selected_image"
+        app:layout_constraintBottom_toTopOf="@+id/select_image_button"
+        app:layout_constraintTop_toBottomOf="@+id/selected_image_txt"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/selected_image_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Selected Image: "
+        app:layout_constraintBottom_toTopOf="@+id/select_image_button"
+        app:layout_constraintTop_toBottomOf="@+id/selected_image"
+        tools:layout_editor_absoluteX="97dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
