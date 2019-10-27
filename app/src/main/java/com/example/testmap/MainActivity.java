@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         btnRealiserTache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ChoixTache(v);
             }
         });
 
@@ -201,19 +201,35 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     public void onClickMicro(View v) {
         Intent intent = new Intent(this, Micro.class);
-        intent.putExtra("chanson",cLieu.getM_preuve().getM_description());
+        intent.putExtra("chanson", cLieu.getM_preuve().getM_description());
         startActivityForResult(intent, 0);
     }
     //endregion
 
     //region Methodes autres
+    public void ChoixTache(View v) {
+        switch (cLieu.getM_preuve().getM_preuve()) {
+            case "Mouvement":
+
+                break;
+
+            case "Photo":
+
+                break;
+
+            case "Parler":
+                onClickMicro(v);
+                break;
+        }
+    }
+
     public void ValidTache() {
         CSave save = Serialize.Deserialization(this, "SaveCluedOrleans.ser");
-        for (CProfile profile : save.getM_listProfile() ) {
-            if(profile.getM_nom().equals(cProfile.getM_nom()))
+        for (CProfile profile : save.getM_listProfile()) {
+            if (profile.getM_nom().equals(cProfile.getM_nom()))
                 profile.getM_listLieu().add(cLieu);
         }
-        Serialize.Serialization(this,save,"SaveCluedOrleans.ser");
+        Serialize.Serialization(this, save, "SaveCluedOrleans.ser");
 
     }
 
