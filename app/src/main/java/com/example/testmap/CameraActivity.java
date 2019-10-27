@@ -1,7 +1,7 @@
+//methode retour regarder textVoice
+
 package com.example.testmap;
 
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.accounts.Account;
@@ -11,13 +11,8 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.provider.MediaStore;
-//non-reconnus sur mon PC//////////////////////////////////////
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-///////////////////////////////////////////////////////////////
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -46,6 +41,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+//non-reconnus sur mon PC//////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 public class CameraActivity extends AppCompatActivity {
     private static String accessToken;
@@ -283,7 +284,7 @@ public class CameraActivity extends AppCompatActivity {
             pickUserAccount();
         } else {
             //ne voit pas le constructeur de CGetTokenTask.java
-            GetTokenTask(CameraActivity.this, mAccount, SCOPE, REQUEST_ACCOUNT_AUTHORIZATION)
+           new CGetTokenTask(CameraActivity.this, mAccount, SCOPE, REQUEST_ACCOUNT_AUTHORIZATION)
                     .execute();
         }
     }

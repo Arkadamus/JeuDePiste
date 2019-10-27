@@ -1,9 +1,5 @@
 package com.example.testmap;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,16 +13,18 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
@@ -63,15 +61,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 onClickOption(v);
             }
         });
-//        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                GenerateTache();
-//            }
-//        });
-        
-        nom_joueur=getIntent().getStringExtra("nom_du_joueur");
-        Toast.makeText(this,"Bonjour "+nom_joueur, Toast.LENGTH_LONG).show();
+        btnRealiserTache.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        nom_joueur = getIntent().getStringExtra("nom_du_joueur");
+        Toast.makeText(this, "Bonjour " + nom_joueur, Toast.LENGTH_LONG).show();
     }
 
     //permet de passer outre le checkpermission mais c'est pas fou
@@ -126,6 +124,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         // check if the request code is same as what is passed  here it is 2
         if (requestCode == 1) {
             GenerateTache();
+        }
+        if(requestCode == 3){
+
         }
     }
 
@@ -194,7 +195,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         if (marker != null)
             marker.remove();
 
-        marker = googleMap.addMarker(new MarkerOptions().title(cLieu.getM_nom()).position(new LatLng(cLieu.getM_latitude(), cLieu.getM_longitude())));
+        if (googleMap != null)
+            marker = googleMap.addMarker(new MarkerOptions().title(cLieu.getM_nom()).position(new LatLng(cLieu.getM_latitude(), cLieu.getM_longitude())));
 
         TextView tvDescription = (TextView) findViewById(R.id.tvDescription);
         tvDescription.setText(cLieu.getM_preuve().getM_description());
@@ -235,6 +237,11 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+    }
+
+    public void onClickCamera(View v){
+        Intent intent = new Intent(this,CameraActivity.class);
+        startActivityForResult(intent,3);
     }
 
     //    @SuppressWarnings("MissingPermission")

@@ -16,12 +16,18 @@ public class CGetTokenTask extends AsyncTask<Void, Void, Void> {
     Account mAccount;
     int mRequestCode;
 
-    void GetTokenTask(Activity activity, Account account, String scope, int requestCode) {
+    CGetTokenTask(){
+        this.mActivity = new Activity();
+        this.mScope = null;
+        this.mAccount = null;
+        this.mRequestCode = 0;
+    }
+
+    CGetTokenTask(Activity activity, Account account, String scope, int requestCode) {
         this.mActivity = activity;
         this.mScope = scope;
         this.mAccount = account;
         this.mRequestCode = requestCode;
-        return;
     }
 
     @Override
