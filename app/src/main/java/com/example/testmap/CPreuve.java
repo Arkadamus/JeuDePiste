@@ -25,7 +25,7 @@ public class CPreuve implements Serializable {
     ///Methodes pour générer le random dans les preuves
     public void GeneratePreuve() {
         int rand = (int) Math.round(Math.random() * 3);
-        rand = 1;
+        //rand = 1;
         m_nom = enumPreuve.values()[rand].toString();
 
 
@@ -101,7 +101,7 @@ public class CPreuve implements Serializable {
 */
 
     private static String GeneratePhoto() {
-        int rand = (int) Math.round(Math.random() * 6);
+        int rand = (int) Math.round(Math.random() * 5);
         String res = null;
         switch (rand) {
             case 0:
@@ -117,15 +117,11 @@ public class CPreuve implements Serializable {
                 break;
 
             case 3:
-                res = "construction";
+                res = "batiment";
                 break;
 
             case 4:
                 res = "voiture";
-                break;
-
-            case 5:
-                res = "personne";
                 break;
 
             default:

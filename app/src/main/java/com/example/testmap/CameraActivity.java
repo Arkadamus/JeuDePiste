@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,9 +46,6 @@ import java.util.Locale;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-//non-reconnus sur mon PC//////////////////////////////////////
-///////////////////////////////////////////////////////////////
-
 public class CameraActivity extends AppCompatActivity {
     private static String accessToken;
     static final int REQUEST_GALLERY_IMAGE = 10;
@@ -58,7 +56,9 @@ public class CameraActivity extends AppCompatActivity {
     private ImageView selectedImage;
     private TextView resultTextView;
     private Button selectImageButton;
+    private Button btnRetourCamera;
     Account mAccount;
+    private String result;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +68,7 @@ public class CameraActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_camera);
         selectImageButton = (Button) findViewById(R.id.select_image_button);
+        btnRetourCamera = (Button) findViewById(R.id.btnRetourCamera);
         selectedImage = (ImageView) findViewById(R.id.selected_image);
         resultTextView = (TextView) findViewById(R.id.result);
         selectImageButton.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +78,12 @@ public class CameraActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(CameraActivity.this,
                         new String[]{Manifest.permission.GET_ACCOUNTS},
                         REQUEST_PERMISSIONS);
+            }
+        });
+        btnRetourCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RetourCamera(v);
             }
         });
     }
@@ -111,6 +118,7 @@ public class CameraActivity extends AppCompatActivity {
             uploadImage(data.getData());
         } else if (requestCode == REQUEST_CODE_PICK_ACCOUNT) {
             if (resultCode == RESULT_OK) {
+
                 String email = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                 AccountManager am = AccountManager.get(this);
                 Account[] accounts = am.getAccountsByType(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE);
@@ -243,6 +251,7 @@ public class CameraActivity extends AppCompatActivity {
         } else {
             message.append("nothing\n");
         }
+        result = message.toString();
         return message.toString();
     }
 
@@ -295,6 +304,14 @@ public class CameraActivity extends AppCompatActivity {
     public void onTokenReceived(String token) {
         accessToken = token;
         launchImagePicker();
+    }
+
+    public void RetourCamera(View v){
+        Intent intent = new Intent();
+        if(result != null)
+            intent.putExtra("EXTRA_CAMERA",result);
+        setResult(3,intent);
+        finish();
     }
 }
 

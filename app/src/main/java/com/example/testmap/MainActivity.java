@@ -141,8 +141,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 Toast.makeText(this, "La tâche n'est pas accomplie, veuillez essayer à nouveau", Toast.LENGTH_SHORT).show();
         }
         if (requestCode == 3) {
-            String labelImage = data.getStringExtra("EXTRA_LABELIMAGE");
-            Toast.makeText(this, labelImage, Toast.LENGTH_SHORT).show();
+            String labelImage = data.getStringExtra("EXTRA_CAMERA");
+            if (ValidPhoto(labelImage.toLowerCase())) {
+                ValidTache();
+                Toast.makeText(this, "La tâche est accomplie", Toast.LENGTH_SHORT).show();
+                GenerateTache();
+            } else
+                Toast.makeText(this, "La tâche n'est pas accomplie, veuillez essayer à nouveau", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -207,7 +212,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     public void onClickCamera(View v) {
         Intent intent = new Intent(this, CameraActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, 3);
     }
     //endregion
 
@@ -329,6 +334,38 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     break;
             }
         }
+        return res;
+    }
+
+    public boolean ValidPhoto(String resultat) {
+        boolean res = false;
+        switch (cLieu.getM_preuve().getM_preuve()) {
+            case "chat":
+                if (resultat.contains("cat"))
+                    res = true;
+                break;
+
+            case "chien":
+                if (resultat.contains("dog"))
+                    res = true;
+                break;
+
+            case "arbre":
+                if (resultat.contains("tree"))
+                    res = true;
+                break;
+
+            case "batiment":
+                if (resultat.contains("building") || resultat.contains("architecture"))
+                    res = true;
+                break;
+
+            case "voiture":
+                if (resultat.contains("car"))
+                    res = true;
+                break;
+        }
+
         return res;
     }
     //endregion
