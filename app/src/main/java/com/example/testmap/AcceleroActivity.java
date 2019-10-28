@@ -38,7 +38,11 @@ public class AcceleroActivity extends AppCompatActivity implements SensorEventLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accelero);
 
-        Intent intent = getIntent();
+        String resultat = getIntent().getStringExtra("EXTRA_MOUVEMENT");
+        if(resultat != null)
+            lettre_dessiner = resultat.toCharArray()[0];
+        else
+            finish();
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -154,6 +158,9 @@ public class AcceleroActivity extends AppCompatActivity implements SensorEventLi
 
     private void finDuJeu() {
         mSensorManager.unregisterListener(this);
-        Toast.makeText(getApplicationContext(), "Gagné!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent();
+        intent.putExtra("EXTRA_ACCELERO",true);
+        startActivityForResult(intent,4);
+        finish();
     }
 }

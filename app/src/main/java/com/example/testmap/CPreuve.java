@@ -63,23 +63,24 @@ public class CPreuve implements Serializable {
     }
 
     private static String GenerateMouvement() {
-        int rand = (int) Math.round(Math.random() * 3);
-        String res = null;
+        int rand = (int) Math.round(Math.random() * 4);
+        String res;
         switch (rand) {
             case 0:
-                res = "S";
+                res = "L";
                 break;
 
             case 1:
-                res = "X";
+                res = "I";
                 break;
 
             case 2:
-                res = "A";
+                res = "T";
                 break;
 
             default:
-                res = "S";
+            case 3:
+                res = "U";
                 break;
         }
 

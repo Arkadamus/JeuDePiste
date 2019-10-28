@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         btnRealiserTache.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                onClickCamera(v);
+                ChoixTache(v);
             }
         });
     }
@@ -149,6 +149,14 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             } else
                 Toast.makeText(this, "La tâche n'est pas accomplie, veuillez essayer à nouveau", Toast.LENGTH_SHORT).show();
         }
+
+        if (requestCode == 4)
+            if (data.getBooleanExtra("EXTRA_ACCELERO", true)) {
+                ValidTache();
+                Toast.makeText(this, "La tâche est accomplie", Toast.LENGTH_SHORT).show();
+                GenerateTache();
+            } else
+                Toast.makeText(this, "La tâche n'est pas accomplie, veuillez essayer à nouveau", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -204,6 +212,12 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         startActivityForResult(intent, 1);
     }
 
+    public void onClickMouvement(View v){
+        Intent intent = new Intent(this, AcceleroActivity.class);
+        intent.putExtra("EXTRA_MOUVEMENT", cLieu.getM_preuve().getM_preuve());
+        startActivityForResult(intent, 4);
+    }
+
     public void onClickMicro(View v) {
         Intent intent = new Intent(this, Micro.class);
         intent.putExtra("chanson", cLieu.getM_preuve().getM_description());
@@ -220,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     public void ChoixTache(View v) {
         switch (cLieu.getM_preuve().getM_preuve()) {
             case "Mouvement":
-
+                onClickMouvement(v);
                 break;
 
             case "Photo":
@@ -244,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     }
 
     public void GenerateTache() {
-        //btnRealiserTache.setEnabled(false);
+        btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = new CPreuve();
         cPreuve.GeneratePreuve();
 
