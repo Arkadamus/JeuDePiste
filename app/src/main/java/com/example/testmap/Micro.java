@@ -80,6 +80,7 @@ public class Micro extends AppCompatActivity {
         }
     }
 
+    //retourne la voix sous forme de String
     private void returnTextVoice() {
         Intent intent = new Intent();
         if (textVoice != null)

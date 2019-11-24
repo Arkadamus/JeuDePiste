@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         });
     }
 
+    //regarde en permanance pour savoir si l'utilisateur est proche de l'ojectif. Creer aussi la tâche
     @Override
     public void onLocationChanged(Location location) {
         if (cLieu == null)
@@ -199,9 +200,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         double latitude = location.getLatitude();
         double longitude = location.getLongitude();
 
-        if (NearLocation(latitude, longitude)) {
+        //if (NearLocation(latitude, longitude)) {
             btnRealiserTache.setEnabled(true);
-        }
+        //}
     }
     //endregion
 
@@ -232,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     //region Methodes autres
     public void ChoixTache(View v) {
-        switch (cLieu.getM_preuve().getM_preuve()) {
+        switch (cLieu.getM_preuve().getM_nom()) {
             case "Mouvement":
                 onClickMouvement(v);
                 break;
@@ -247,6 +248,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         }
     }
 
+    //Permet d'enregistrer la tache dans la list de l'utilisateur
     public void ValidTache() {
         CSave save = Serialize.Deserialization(this, "SaveCluedOrleans.ser");
         for (CProfile profile : save.getM_listProfile()) {
@@ -257,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     }
 
+    //genere une nouvelle tache avec un lieu
     public void GenerateTache() {
         btnRealiserTache.setEnabled(false);
         CPreuve cPreuve = new CPreuve();

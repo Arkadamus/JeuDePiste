@@ -73,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
+    //Enregistre un nouvel utilisateur
     public void Enregistrer(View v) {
         if (etText.getText().toString() != "" && etPassword.getText().toString() != "") {
             CProfile profile = new CProfile();

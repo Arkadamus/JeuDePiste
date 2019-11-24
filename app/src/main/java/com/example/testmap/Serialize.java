@@ -14,6 +14,7 @@ import java.io.Serializable;
 
 public class Serialize {
 
+    //Creer un fichier avec les données des l'utilisateurs
     public static <CSave extends Serializable> void Serialization(Context context, CSave save, String fileName) {
         try {
             FileOutputStream fos = context.openFileOutput(fileName, Context.MODE_PRIVATE);
@@ -28,6 +29,7 @@ public class Serialize {
         }
     }
 
+    //Creer un objet CSave depuis le fichier
     public static <CSave extends Serializable> CSave Deserialization(Context context, String fileName) {
         CSave save = null;
 
@@ -45,6 +47,7 @@ public class Serialize {
         return save;
     }
 
+    //Pour faire des tests
     public static void ResetFile(Context context, String fileName) {
         context.deleteFile(fileName);
     }
